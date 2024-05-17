@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    restart: always
+    volumes:
+      - "./mongodb:/data/db:rw"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: myadmin
+      MONGO_INITDB_ROOT_PASSWORD: mypass
+
+  mongo-ui:  # this service is a MongoDB UI, and is optional
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    volumes:
+      - "./mongodb:/data/db:rw"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: myadmin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mypass
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: pass
+    depends_on:
+      - mongo
+
